@@ -3,11 +3,12 @@ const package = require("./package.json");
 
 module.exports.bootstrap = async ({
   getContext,
+  log,
   options,
   refresh,
   setContext
 }) => {
-  console.log(`[${package.name}] Hello from Contentful!`);
+  log(`Hello from Contentful!`);
 };
 
 module.exports.getOptionsFromSetup = ({ accessToken, spaceId }) => {
