@@ -7,7 +7,7 @@ module.exports.bootstrap = async ({
   refresh,
   setContext
 }) => {
-  console.log("Hello from Contentful!");
+  console.log(`[${package.name}] Hello from Contentful!`);
 };
 
 module.exports.getOptionsFromSetup = ({ accessToken, spaceId }) => {
