@@ -1,0 +1,40 @@
+{
+  "name": "sourcebit-source-contentful",
+  "version": "0.1.0",
+  "description": "A Contentful plugin for Sourcebit",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run format",
+    "format": "prettier --write \"./**/*.{js,jsx,md,html}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackbithq/sourcebit-source-contentful.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stackbithq/sourcebit-source-contentful/issues"
+  },
+  "homepage": "https://github.com/stackbithq/sourcebit-source-contentful#readme",
+  "dependencies": {
+    "contentful": "^7.12.0"
+  },
+  "devDependencies": {
+    "husky": "^4.0.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,md,html}": [
+      "npm run format",
+      "git add"
+    ]
+  }
+}
