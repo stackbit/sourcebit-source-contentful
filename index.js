@@ -3,6 +3,8 @@ const contentfulManagement = require("contentful-management");
 const { normalizeEntries } = require("./lib/contentful-util");
 const pkg = require("./package.json");
 
+module.exports.name = pkg.name;
+
 module.exports.options = {
   accessToken: {
     env: "CONTENTFUL_ACCESS_TOKEN",
@@ -136,8 +138,9 @@ module.exports.getSetup = ({ chalk, inquirer, ora }) => {
       {
         type: "input",
         name: "accessToken",
-        message:
-          "What is your Contentful Personal Access Token? If you don't have one, see https://www.contentful.com/r/knowledgebase/personal-access-tokens/."
+        message: `What is your Contentful Personal Access Token? ${chalk.reset(
+          "To create one, see https://www.contentful.com/r/knowledgebase/personal-access-tokens/."
+        )}`
       }
     ]);
 
