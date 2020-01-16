@@ -60,9 +60,19 @@ module.exports.bootstrap = async ({
     resolveLinks: true
   });
 
+  const { items: contentTypes } = await client.getContentTypes();
+  const models = contentTypes.map(contentType => ({
+    source: pkg.name,
+    modelName: contentType.sys.id,
+    modelLabel: contentType.name || contentType.sys.id,
+    projectId: options.spaceId,
+    projectEnvironment: options.environment,
+    fieldNames: contentType.fields.map(field => field.id)
+  }));
+
   setPluginContext({
-    assets,
     entries,
+    models,
     nextSyncToken
   });
 
@@ -90,16 +100,12 @@ module.exports.bootstrap = async ({
       response.entries.forEach(entry => {
         const index = entries.findIndex(({ sys }) => sys.id === entry.sys.id);
 
-        log("Updated entry:");
-        log(entries[index]);
-
         if (index !== -1) {
           entries[index] = entry;
         }
       });
 
       setPluginContext({
-        assets,
         entries,
         nextSyncToken: response.nextSyncToken
       });
@@ -110,11 +116,12 @@ module.exports.bootstrap = async ({
 };
 
 module.exports.transform = ({ data, getPluginContext }) => {
-  const { assets = [], entries = [] } = getPluginContext();
-  const normalizedEntries = normalizeEntries(assets, entries);
+  const { entries = [], models } = getPluginContext();
+  const normalizedEntries = normalizeEntries(entries);
 
   return {
     ...data,
+    models: data.models.concat(models),
     objects: data.objects.concat(normalizedEntries)
   };
 };
