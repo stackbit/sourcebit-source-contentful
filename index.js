@@ -126,15 +126,11 @@ module.exports.transform = ({ data, getPluginContext }) => {
   };
 };
 
-module.exports.getOptionsFromSetup = ({
-  accessToken,
-  environment,
-  spaceId
-}) => {
+module.exports.getOptionsFromSetup = ({ answers }) => {
   return {
-    accessToken,
-    environment,
-    spaceId
+    accessToken: answers.accessToken,
+    environment: answers.environment,
+    spaceId: answers.spaceId
   };
 };
 
