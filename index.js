@@ -153,32 +153,39 @@ module.exports.getSetup = ({ chalk, inquirer, ora }) => {
       accessToken: answers.accessToken
     });
     const spacesSpinner = ora("Looking for Contentful spaces").start();
-    const { items: spaces } = await client.getSpaces();
 
-    spacesSpinner.succeed();
+    try {
+      const { items: spaces } = await client.getSpaces();
 
-    if (spaces.length === 1) {
-      answers.spaceId = spaces[0].sys.id;
+      spacesSpinner.succeed();
 
-      ora(
-        `The only space in the account has been selected: ${chalk.bold(
-          spaces[0].name
-        )}.`
-      ).info();
-    } else {
-      const { spaceId } = await inquirer.prompt([
-        {
-          type: "list",
-          name: "spaceId",
-          message: "Which Contentful space do you want to use?",
-          choices: spaces.map(space => ({
-            name: space.name,
-            value: space.sys.id
-          }))
-        }
-      ]);
+      if (spaces.length === 1) {
+        answers.spaceId = spaces[0].sys.id;
 
-      answers.spaceId = spaceId;
+        ora(
+          `The only space in the account has been selected: ${chalk.bold(
+            spaces[0].name
+          )}.`
+        ).info();
+      } else {
+        const { spaceId } = await inquirer.prompt([
+          {
+            type: "list",
+            name: "spaceId",
+            message: "Which Contentful space do you want to use?",
+            choices: spaces.map(space => ({
+              name: space.name,
+              value: space.sys.id
+            }))
+          }
+        ]);
+
+        answers.spaceId = spaceId;
+      }
+    } catch (error) {
+      spacesSpinner.fail();
+
+      throw error;
     }
 
     const environmentsSpinner = ora("Looking for environments").start();
