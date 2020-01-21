@@ -143,7 +143,9 @@ module.exports.getSetup = ({ chalk, inquirer, ora }) => {
         name: "accessToken",
         message: `What is your Contentful Personal Access Token? ${chalk.reset(
           "To create one, see https://www.contentful.com/r/knowledgebase/personal-access-tokens/."
-        )}`
+        )}`,
+        validate: value =>
+          value.length > 0 ? true : "The Personal Access Token cannot be empty."
       }
     ]);
 
