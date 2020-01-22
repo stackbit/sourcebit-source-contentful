@@ -1,6 +1,6 @@
 const contentful = require("contentful");
 const contentfulManagement = require("contentful-management");
-const { normalizeEntries } = require("./lib/contentful-util");
+const { normalizeEntries, resolveLinks } = require("./lib/contentful-util");
 const pkg = require("./package.json");
 
 module.exports.name = pkg.name;
@@ -59,7 +59,6 @@ module.exports.bootstrap = async ({
     initial: true,
     resolveLinks: true
   });
-
   const { items: contentTypes } = await client.getContentTypes();
   const models = contentTypes.map(contentType => ({
     source: pkg.name,
@@ -71,6 +70,7 @@ module.exports.bootstrap = async ({
   }));
 
   setPluginContext({
+    assets,
     entries,
     models,
     nextSyncToken
@@ -80,7 +80,8 @@ module.exports.bootstrap = async ({
     setInterval(async () => {
       const { assets, entries, nextSyncToken } = getPluginContext();
       const response = await client.sync({
-        nextSyncToken
+        nextSyncToken,
+        resolveLinks: true
       });
 
       if (response.nextSyncToken === nextSyncToken) {
@@ -92,7 +93,7 @@ module.exports.bootstrap = async ({
         const index = assets.findIndex(({ sys }) => sys.id === asset.sys.id);
 
         if (index !== -1) {
-          assets[index] = asset;
+          assets[index] = resolveLinks(asset, assets, entries);
         }
       });
 
@@ -101,11 +102,12 @@ module.exports.bootstrap = async ({
         const index = entries.findIndex(({ sys }) => sys.id === entry.sys.id);
 
         if (index !== -1) {
-          entries[index] = entry;
+          entries[index] = resolveLinks(entry, assets, entries);
         }
       });
 
       setPluginContext({
+        assets,
         entries,
         nextSyncToken: response.nextSyncToken
       });
