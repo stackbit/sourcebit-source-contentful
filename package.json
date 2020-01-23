@@ -11,9 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/stackbithq/sourcebit-source-contentful.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["headless", "headless-cms", "jamstack", "ssg"],
+  "author": "Stackbit",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/stackbithq/sourcebit-source-contentful/issues"
   },
