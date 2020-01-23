@@ -8,6 +8,16 @@
 
 With this plugin, you can add Contentful as a data source for Sourcebit. To connect your Contentful account, you need a [Personal Access Token](https://www.contentful.com/r/knowledgebase/personal-access-tokens/).
 
+## 🏗 Installation
+
+To install the plugin and add it to your project, run:
+
+```
+npm install sourcebit-source-contentful --save
+```
+
+> 💡 You don't need to run this command if you start Sourcebit using the [interactive setup process](#%EF%B8%8F-interactive-setup-process), as the CLI will install the plugin for you and add it as a dependency to your project.
+
 ## ⚙️ Configuration
 
 The plugin accepts the following configuration parameters. They can be supplied in any of the following ways:
