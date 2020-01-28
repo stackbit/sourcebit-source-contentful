@@ -1,6 +1,6 @@
 {
   "name": "sourcebit-source-contentful",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A Contentful plugin for Sourcebit",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,12 @@
     "type": "git",
     "url": "git+https://github.com/stackbithq/sourcebit-source-contentful.git"
   },
-  "keywords": ["headless", "headless-cms", "jamstack", "ssg"],
+  "keywords": [
+    "headless",
+    "headless-cms",
+    "jamstack",
+    "ssg"
+  ],
   "author": "Stackbit",
   "license": "MIT",
   "bugs": {
