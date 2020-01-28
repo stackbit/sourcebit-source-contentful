@@ -11,6 +11,9 @@ module.exports.options = {
     private: true
   },
   environment: {},
+  host: {
+    env: "CONTENTFUL_HOST"
+  },
   pollingInterval: {
     default: 5000
   },
@@ -23,7 +26,6 @@ module.exports.options = {
 
 module.exports.bootstrap = async ({
   getPluginContext,
-  log,
   options,
   refresh,
   setPluginContext
@@ -53,6 +55,7 @@ module.exports.bootstrap = async ({
 
   const client = contentful.createClient({
     accessToken: apiKey.accessToken,
+    host: options.host,
     space: options.spaceId
   });
   const { assets, entries, nextSyncToken } = await client.sync({
