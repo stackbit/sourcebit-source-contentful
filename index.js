@@ -17,6 +17,9 @@ module.exports.options = {
   pollingInterval: {
     default: 5000
   },
+  preview: {
+    default: false
+  },
   projectId: {},
   watch: {
     default: false,
@@ -30,11 +33,15 @@ module.exports.bootstrap = async ({
   refresh,
   setPluginContext
 }) => {
+  const host =
+    options.host || (options.preview ? "preview.contentful.com" : undefined);
   const clientManagement = contentfulManagement.createClient({
     accessToken: options.accessToken
   });
   const space = await clientManagement.getSpace(options.spaceId);
-  const { items: apiKeys } = await space.getApiKeys();
+  const { items: apiKeys } = await (options.preview
+    ? space.getPreviewApiKeys()
+    : space.getApiKeys());
 
   let apiKey = apiKeys.find(({ name }) => name === pkg.name);
 
@@ -55,7 +62,7 @@ module.exports.bootstrap = async ({
 
   const client = contentful.createClient({
     accessToken: apiKey.accessToken,
-    host: options.host,
+    host,
     space: options.spaceId
   });
   const { assets, entries, nextSyncToken } = await client.sync({
