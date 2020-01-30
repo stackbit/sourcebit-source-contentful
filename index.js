@@ -17,9 +17,7 @@ module.exports.options = {
   pollingInterval: {
     default: 5000
   },
-  preview: {
-    default: false
-  },
+  preview: {},
   projectId: {},
   watch: {
     default: false,
@@ -33,13 +31,15 @@ module.exports.bootstrap = async ({
   refresh,
   setPluginContext
 }) => {
+  const isPreview =
+    options.preview !== undefined ? options.preview : options.watch;
   const host =
-    options.host || (options.preview ? "preview.contentful.com" : undefined);
+    options.host || (isPreview ? "preview.contentful.com" : undefined);
   const clientManagement = contentfulManagement.createClient({
     accessToken: options.accessToken
   });
   const space = await clientManagement.getSpace(options.spaceId);
-  const { items: apiKeys } = await (options.preview
+  const { items: apiKeys } = await (isPreview
     ? space.getPreviewApiKeys()
     : space.getApiKeys());
 
