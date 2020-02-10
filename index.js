@@ -146,7 +146,7 @@ module.exports.getOptionsFromSetup = ({ answers }) => {
   };
 };
 
-module.exports.getSetup = ({ chalk, inquirer, ora }) => {
+module.exports.getSetup = ({ chalk, currentOptions, inquirer, ora }) => {
   return async () => {
     const answers = {};
     const { accessToken } = await inquirer.prompt([
@@ -157,7 +157,10 @@ module.exports.getSetup = ({ chalk, inquirer, ora }) => {
           "To create one, see https://www.contentful.com/r/knowledgebase/personal-access-tokens/."
         )}`,
         validate: value =>
-          value.length > 0 ? true : "The Personal Access Token cannot be empty."
+          value.length > 0
+            ? true
+            : "The Personal Access Token cannot be empty.",
+        default: currentOptions.accessToken
       }
     ]);
 
