@@ -72,4 +72,4 @@ _N/A_
 
 ## 📤 Output
 
-This plugin adds normalized entries to the `objects` data bucket and normalized model objects to the `models` data bucket.
+This plugin adds normalized entries and assets to the `objects` data bucket and normalized model objects to the `models` data bucket.

@@ -128,8 +128,8 @@ module.exports.bootstrap = async ({
 };
 
 module.exports.transform = ({ data, getPluginContext }) => {
-  const { entries = [], models } = getPluginContext();
-  const normalizedEntries = normalizeEntries(entries);
+  const { assets, entries = [], models } = getPluginContext();
+  const normalizedEntries = normalizeEntries(entries.concat(assets));
 
   return {
     ...data,
