@@ -19,6 +19,9 @@ module.exports.options = {
   },
   preview: {},
   projectId: {},
+  richTextOutputFormat: {
+    default: "html"
+  },
   watch: {
     default: false,
     runtimeParameter: "watch"
@@ -70,19 +73,11 @@ module.exports.bootstrap = async ({
     resolveLinks: true
   });
   const { items: contentTypes } = await client.getContentTypes();
-  const models = contentTypes.map(contentType => ({
-    source: pkg.name,
-    modelName: contentType.sys.id,
-    modelLabel: contentType.name || contentType.sys.id,
-    projectId: options.spaceId,
-    projectEnvironment: options.environment,
-    fieldNames: contentType.fields.map(field => field.id)
-  }));
 
   setPluginContext({
     assets,
+    contentTypes,
     entries,
-    models,
     nextSyncToken
   });
 
@@ -127,9 +122,21 @@ module.exports.bootstrap = async ({
   }
 };
 
-module.exports.transform = ({ data, getPluginContext }) => {
-  const { assets, entries = [], models } = getPluginContext();
-  const normalizedEntries = normalizeEntries(entries.concat(assets));
+module.exports.transform = ({ data, getPluginContext, options }) => {
+  const { assets, contentTypes = [], entries = [] } = getPluginContext();
+  const normalizedEntries = normalizeEntries({
+    contentTypes,
+    entries: entries.concat(assets),
+    options
+  });
+  const models = contentTypes.map(contentType => ({
+    source: pkg.name,
+    modelName: contentType.sys.id,
+    modelLabel: contentType.name || contentType.sys.id,
+    projectId: options.spaceId,
+    projectEnvironment: options.environment,
+    fieldNames: contentType.fields.map(field => field.id)
+  }));
 
   return {
     ...data,
