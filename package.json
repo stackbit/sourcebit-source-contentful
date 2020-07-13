@@ -1,49 +1,51 @@
 {
-  "name": "sourcebit-source-contentful",
-  "version": "0.6.0",
-  "description": "A Contentful plugin for Sourcebit",
-  "main": "index.js",
-  "scripts": {
-    "test": "npm run format",
-    "format": "prettier --write \"./**/*.{js,jsx,md,html}\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stackbithq/sourcebit-source-contentful.git"
-  },
-  "keywords": [
-    "headless",
-    "headless-cms",
-    "jamstack",
-    "ssg"
-  ],
-  "author": "Stackbit",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/stackbithq/sourcebit-source-contentful/issues"
-  },
-  "homepage": "https://github.com/stackbithq/sourcebit-source-contentful#readme",
-  "dependencies": {
-    "@contentful/rich-text-html-renderer": "^13.4.0",
-    "contentful": "^7.12.0",
-    "contentful-management": "^5.12.0"
-  },
-  "devDependencies": {
-    "@stackbit/prettier-config": "^1.0.0",
-    "husky": "^4.0.0",
-    "lint-staged": "^9.5.0",
-    "prettier": "^1.19.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,jsx,md,html}": [
-      "npm run format",
-      "git add"
-    ]
-  },
-  "prettier": "@stackbit/prettier-config"
+    "name": "sourcebit-source-contentful",
+    "version": "0.6.0",
+    "description": "A Contentful plugin for Sourcebit",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "format": "prettier --write \"./**/*.{js,jsx,md,html}\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/stackbithq/sourcebit-source-contentful.git"
+    },
+    "keywords": [
+        "headless",
+        "headless-cms",
+        "jamstack",
+        "ssg"
+    ],
+    "author": "Stackbit",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/stackbithq/sourcebit-source-contentful/issues"
+    },
+    "homepage": "https://github.com/stackbithq/sourcebit-source-contentful#readme",
+    "dependencies": {
+        "@contentful/rich-text-html-renderer": "^13.4.0",
+        "contentful": "^7.12.0",
+        "contentful-management": "^5.12.0"
+    },
+    "devDependencies": {
+        "@stackbit/prettier-config": "^1.0.0",
+        "husky": "^4.0.0",
+        "jest": "^26.1.0",
+        "lint-staged": "^9.5.0",
+        "prettier": "^1.19.1"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,md,html}": [
+            "npm run format",
+            "git add"
+        ]
+    },
+    "prettier": "@stackbit/prettier-config"
 }
