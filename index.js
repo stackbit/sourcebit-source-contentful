@@ -1,6 +1,6 @@
 const contentful = require('contentful');
 const contentfulManagement = require('contentful-management');
-const { normalizeEntries, resolveLinks } = require('./lib/contentful-util');
+const { normalizeEntries, resolveLinksInEntry } = require('./lib/contentful-util');
 const pkg = require('./package.json');
 
 module.exports.name = pkg.name;
@@ -61,7 +61,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
     });
     const { assets, entries, nextSyncToken } = await client.sync({
         initial: true,
-        resolveLinks: true
+        resolveLinks: false
     });
     const { items: contentTypes } = await client.getContentTypes();
 
@@ -77,19 +77,39 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             const { assets, entries, nextSyncToken } = getPluginContext();
             const response = await client.sync({
                 nextSyncToken,
-                resolveLinks: true
+                resolveLinks: false
             });
 
             if (response.nextSyncToken === nextSyncToken) {
                 return;
             }
 
+            // Handling deleted assets.
+            response.deletedAssets.forEach(asset => {
+                const index = assets.findIndex(({ sys }) => sys.id === asset.sys.id);
+
+                if (index !== -1) {
+                    assets[index] = null;
+                }
+            });
+
             // Handling updated assets.
             response.assets.forEach(asset => {
                 const index = assets.findIndex(({ sys }) => sys.id === asset.sys.id);
 
+                if (index === -1) {
+                    assets.push(asset);
+                } else {
+                    assets[index] = asset;
+                }
+            });
+
+            // Handling deleted entries.
+            response.deletedEntries.forEach(entry => {
+                const index = entries.findIndex(({ sys }) => sys.id === entry.sys.id);
+
                 if (index !== -1) {
-                    assets[index] = resolveLinks(asset, assets, entries);
+                    entries[index] = null;
                 }
             });
 
@@ -97,14 +117,16 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             response.entries.forEach(entry => {
                 const index = entries.findIndex(({ sys }) => sys.id === entry.sys.id);
 
-                if (index !== -1) {
-                    entries[index] = resolveLinks(entry, assets, entries);
+                if (index === -1) {
+                    entries.push(entry);
+                } else {
+                    entries[index] = entry;
                 }
             });
 
             setPluginContext({
-                assets,
-                entries,
+                assets: assets.filter(Boolean),
+                entries: entries.filter(Boolean),
                 nextSyncToken: response.nextSyncToken
             });
 
@@ -115,9 +137,10 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
 
 module.exports.transform = ({ data, getPluginContext, options }) => {
     const { assets, contentTypes = [], entries = [] } = getPluginContext();
+    const entriesWithResolvedLinks = entries.map(entry => resolveLinksInEntry(entry, assets, entries));
     const normalizedEntries = normalizeEntries({
         contentTypes,
-        entries: entries.concat(assets),
+        entries: entriesWithResolvedLinks.concat(assets),
         options
     });
     const models = contentTypes.map(contentType => ({
