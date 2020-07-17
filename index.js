@@ -10,6 +10,14 @@ module.exports.options = {
         env: 'CONTENTFUL_ACCESS_TOKEN',
         private: true
     },
+    deliveryToken: {
+        env: 'CONTENTFUL_DELIVERY_TOKEN',
+        private: true
+    },
+    previewToken: {
+        env: 'CONTENTFUL_PREVIEW_TOKEN',
+        private: true
+    },
     environment: {},
     host: {
         env: 'CONTENTFUL_HOST'
@@ -35,27 +43,37 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
         accessToken: options.accessToken
     });
     const space = await clientManagement.getSpace(options.spaceId);
-    const { items: apiKeys } = await (isPreview ? space.getPreviewApiKeys() : space.getApiKeys());
 
-    let apiKey = apiKeys.find(({ name }) => name === pkg.name);
+    let accessToken;
+    if (!isPreview && options.deliveryToken) {
+        accessToken = options.deliveryToken;
+    } else if (isPreview && options.previewToken) {
+        accessToken = options.previewToken;
+    } else {
+        const { items: apiKeys } = await (isPreview ? space.getPreviewApiKeys() : space.getApiKeys());
 
-    if (!apiKey) {
-        apiKey = await space.createApiKey({
-            name: pkg.name,
-            environments: [
-                {
-                    sys: {
-                        type: 'Link',
-                        linkType: 'Environment',
-                        id: options.environment
+        let apiKey = apiKeys.find(({ name }) => name === pkg.name);
+
+        if (!apiKey) {
+            apiKey = await space.createApiKey({
+                name: pkg.name,
+                environments: [
+                    {
+                        sys: {
+                            type: 'Link',
+                            linkType: 'Environment',
+                            id: options.environment
+                        }
                     }
-                }
-            ]
-        });
+                ]
+            });
+        }
+
+        accessToken = apiKey.accessToken;
     }
 
     const client = contentful.createClient({
-        accessToken: apiKey.accessToken,
+        accessToken,
         host,
         space: options.spaceId
     });
