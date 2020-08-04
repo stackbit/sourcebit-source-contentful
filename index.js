@@ -1,6 +1,6 @@
 const contentful = require('contentful');
 const contentfulManagement = require('contentful-management');
-const { normalizeEntries, resolveLinksInEntry } = require('./lib/contentful-util');
+const { normalizeEntries, resolveLinksInEntry, syncWithRetry } = require('./lib/contentful-util');
 const pkg = require('./package.json');
 
 module.exports.name = pkg.name;
@@ -45,6 +45,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
     const space = await clientManagement.getSpace(options.spaceId);
 
     let accessToken;
+
     if (!isPreview && options.deliveryToken) {
         accessToken = options.deliveryToken;
     } else if (isPreview && options.previewToken) {
@@ -77,7 +78,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
         host,
         space: options.spaceId
     });
-    const { assets, entries, nextSyncToken } = await client.sync({
+    const { assets, entries, nextSyncToken } = await syncWithRetry(client, {
         initial: true,
         resolveLinks: false
     });
