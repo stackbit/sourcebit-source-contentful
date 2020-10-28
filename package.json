@@ -6,7 +6,8 @@
     "scripts": {
         "test": "jest",
         "test:watch": "jest --watch",
-        "format": "prettier --write \"./**/*.{js,jsx,md,html}\""
+        "format": "prettier --write \"./**/*.{js,jsx,md,html}\"",
+        "version-patch": "npm version patch -m \"bumped version to v%s\""
     },
     "repository": {
         "type": "git",
