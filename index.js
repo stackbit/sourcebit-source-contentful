@@ -39,6 +39,7 @@ module.exports.options = {
 module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPluginContext }) => {
     const isPreview = options.preview !== undefined ? options.preview : options.watch;
     const host = options.host || (isPreview ? 'preview.contentful.com' : undefined);
+    const environment = options.environment || 'master';
     const clientManagement = contentfulManagement.createClient({
         accessToken: options.accessToken
     });
@@ -63,7 +64,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
                         sys: {
                             type: 'Link',
                             linkType: 'Environment',
-                            id: options.environment
+                            id: environment
                         }
                     }
                 ]
@@ -76,7 +77,8 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
     const client = contentful.createClient({
         accessToken,
         host,
-        space: options.spaceId
+        space: options.spaceId,
+        environment: environment
     });
     const { assets, entries, nextSyncToken } = await syncWithRetry(client, {
         initial: true,
