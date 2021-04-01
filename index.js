@@ -33,6 +33,9 @@ module.exports.options = {
     watch: {
         default: false,
         runtimeParameter: 'watch'
+    },
+    resolveLinks: {
+        default: false
     }
 };
 
@@ -82,7 +85,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
     });
     const { assets, entries, nextSyncToken } = await syncWithRetry(client, {
         initial: true,
-        resolveLinks: false
+        resolveLinks: options.resolveLinks
     });
     const { items: contentTypes } = await client.getContentTypes();
 
@@ -98,7 +101,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             const { assets, entries, nextSyncToken } = getPluginContext();
             const response = await client.sync({
                 nextSyncToken,
-                resolveLinks: false
+                resolveLinks: options.resolveLinks
             });
 
             if (response.nextSyncToken === nextSyncToken) {
