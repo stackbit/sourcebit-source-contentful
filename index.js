@@ -26,7 +26,7 @@ module.exports.options = {
         default: 5000
     },
     preview: {},
-    projectId: {},
+    spaceId: {},
     richTextOutputFormat: {
         default: 'html'
     },
@@ -43,10 +43,6 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
     const isPreview = options.preview !== undefined ? options.preview : options.watch;
     const host = options.host || (isPreview ? 'preview.contentful.com' : undefined);
     const environment = options.environment || 'master';
-    const clientManagement = contentfulManagement.createClient({
-        accessToken: options.accessToken
-    });
-    const space = await clientManagement.getSpace(options.spaceId);
 
     let accessToken;
 
@@ -55,6 +51,10 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
     } else if (isPreview && options.previewToken) {
         accessToken = options.previewToken;
     } else {
+        const clientManagement = contentfulManagement.createClient({
+            accessToken: options.accessToken
+        });
+        const space = await clientManagement.getSpace(options.spaceId);
         const { items: apiKeys } = await (isPreview ? space.getPreviewApiKeys() : space.getApiKeys());
 
         let apiKey = apiKeys.find(({ name }) => name === pkg.name);
