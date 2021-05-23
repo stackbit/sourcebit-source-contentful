@@ -1,6 +1,6 @@
 const contentful = require('contentful');
 const contentfulManagement = require('contentful-management');
-const { normalizeEntries, resolveLinksInEntry, syncWithRetry } = require('./lib/contentful-util');
+const { normalizeEntries, resolveLinksInEntry, getDefaultLocale, syncWithRetry } = require('./lib/contentful-util');
 const pkg = require('./package.json');
 
 module.exports.name = pkg.name;
@@ -88,11 +88,13 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
         resolveLinks: options.resolveLinks
     });
     const { items: contentTypes } = await client.getContentTypes();
+    const { items: locales } = await client.getLocales();
 
     setPluginContext({
+        entries,
         assets,
         contentTypes,
-        entries,
+        locales,
         nextSyncToken
     });
 
@@ -160,11 +162,13 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
 };
 
 module.exports.transform = ({ data, getPluginContext, options }) => {
-    const { assets, contentTypes = [], entries = [] } = getPluginContext();
-    const entriesWithResolvedLinks = entries.map(entry => resolveLinksInEntry(entry, assets, entries));
+    const { entries = [], assets, contentTypes = [], locales = [] } = getPluginContext();
+    const defaultLocale = getDefaultLocale(locales);
+    const entriesWithResolvedLinks = entries.map(entry => resolveLinksInEntry(entry, entries, assets, defaultLocale.code));
     const normalizedEntries = normalizeEntries({
         contentTypes,
         entries: entriesWithResolvedLinks.concat(assets),
+        defaultLocaleCode: defaultLocale.code,
         options
     });
     const models = contentTypes.map(contentType => ({
