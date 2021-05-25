@@ -140,6 +140,7 @@ describe('`transform()`', () => {
         const context = {
             assets: [],
             contentTypes: [],
+            locales: [{ code: 'en-US', default: true }],
             entries: MOCK_ENTRIES
         };
         const output = plugin.transform({
