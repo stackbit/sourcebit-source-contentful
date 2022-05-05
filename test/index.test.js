@@ -132,13 +132,55 @@ const MOCK_ENTRIES = [
                 'en-US': 'Doe'
             }
         }
-    }
+    },
 ];
+
+const MOCK_ASSETS = [
+    {
+        sys: {
+            space: {
+                sys: {
+                    type: "Link",
+                    linkType: "Space",
+                    id: "123456789"
+                }
+            },
+            id: "7orLdboQQowIUs22KAW4U",
+            type: "Asset",
+            createdAt: "2022-04-30T14:30:48.053Z",
+            updatedAt: "2022-04-30T14:32:40.219Z",
+            environment: {
+                sys: {
+                    id: "master",
+                    type: "Link",
+                    linkType: "Environment"
+                }
+            },
+            revision: 2,
+        },
+        fields: {
+            title: "Sparkler",
+            description: "John with Sparkler",
+            file: {
+                url: "//images.ctfassets.net/spaceId/7orLdboQQowIUs22KAW4U/e237faf0c6a0c89f8dce3e35e552176e/matt-palmer-254999.jpg",
+                details: {
+                    size: 2293094,
+                    image: {
+                        width: 3000,
+                        height: 2000
+                    }
+                },
+                fileName: "matt-palmer-254999.jpg",
+                contentType: "image/jpeg"
+            }
+        }
+    }
+]
 
 describe('`transform()`', () => {
     test('resolves links and normalizes entries', () => {
         const context = {
-            assets: [],
+            assets: MOCK_ASSETS,
             contentTypes: [],
             locales: [{ code: 'en-US', default: true }],
             entries: MOCK_ENTRIES
@@ -157,7 +199,7 @@ describe('`transform()`', () => {
 
         const { objects } = output;
 
-        expect(objects.length).toBe(3);
+        expect(objects.length).toBe(4);
 
         expect(objects[0].title).toBe(MOCK_ENTRIES[0].fields.title['en-US']);
         expect(objects[0].subtitle).toBe(MOCK_ENTRIES[0].fields.subtitle['en-US']);
@@ -171,5 +213,11 @@ describe('`transform()`', () => {
 
         expect(objects[2].firstName).toBe(MOCK_ENTRIES[2].fields.firstName['en-US']);
         expect(objects[2].lastName).toBe(MOCK_ENTRIES[2].fields.lastName['en-US']);
+
+        expect(objects[3].url).toContain(MOCK_ASSETS[0].fields.file.url);
+        expect(objects[3].fileName).toContain(MOCK_ASSETS[0].fields.file.fileName);
+        expect(objects[3].contentType).toContain(MOCK_ASSETS[0].fields.file.contentType);
+        expect(objects[3].details).toBeDefined();
+        expect(objects[3].details.size).toEqual(MOCK_ASSETS[0].fields.file.details.size);
     });
 });

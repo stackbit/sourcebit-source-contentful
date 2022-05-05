@@ -111,7 +111,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             }
 
             // Handling deleted assets.
-            response.deletedAssets.forEach(asset => {
+            response.deletedAssets.forEach((asset) => {
                 const index = assets.findIndex(({ sys }) => sys.id === asset.sys.id);
 
                 if (index !== -1) {
@@ -120,7 +120,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             });
 
             // Handling updated assets.
-            response.assets.forEach(asset => {
+            response.assets.forEach((asset) => {
                 const index = assets.findIndex(({ sys }) => sys.id === asset.sys.id);
 
                 if (index === -1) {
@@ -131,7 +131,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             });
 
             // Handling deleted entries.
-            response.deletedEntries.forEach(entry => {
+            response.deletedEntries.forEach((entry) => {
                 const index = entries.findIndex(({ sys }) => sys.id === entry.sys.id);
 
                 if (index !== -1) {
@@ -140,7 +140,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             });
 
             // Handling updated entries.
-            response.entries.forEach(entry => {
+            response.entries.forEach((entry) => {
                 const index = entries.findIndex(({ sys }) => sys.id === entry.sys.id);
 
                 if (index === -1) {
@@ -164,20 +164,20 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
 module.exports.transform = ({ data, getPluginContext, options }) => {
     const { entries = [], assets, contentTypes = [], locales = [] } = getPluginContext();
     const defaultLocale = getDefaultLocale(locales);
-    const entriesWithResolvedLinks = entries.map(entry => resolveLinksInEntry(entry, entries, assets, defaultLocale.code));
+    const entriesWithResolvedLinks = entries.map((entry) => resolveLinksInEntry(entry, entries, assets, defaultLocale.code));
     const normalizedEntries = normalizeEntries({
         contentTypes,
         entries: entriesWithResolvedLinks.concat(assets),
         defaultLocaleCode: defaultLocale.code,
         options
     });
-    const models = contentTypes.map(contentType => ({
+    const models = contentTypes.map((contentType) => ({
         source: pkg.name,
         modelName: contentType.sys.id,
         modelLabel: contentType.name || contentType.sys.id,
         projectId: options.spaceId,
         projectEnvironment: options.environment,
-        fieldNames: contentType.fields.map(field => field.id)
+        fieldNames: contentType.fields.map((field) => field.id)
     }));
 
     return {
@@ -205,7 +205,7 @@ module.exports.getSetup = ({ chalk, currentOptions, inquirer, ora }) => {
                 message: `What is your Contentful Personal Access Token? ${chalk.reset(
                     'To create one, see https://www.contentful.com/r/knowledgebase/personal-access-tokens/.'
                 )}`,
-                validate: value => (value.length > 0 ? true : 'The Personal Access Token cannot be empty.'),
+                validate: (value) => (value.length > 0 ? true : 'The Personal Access Token cannot be empty.'),
                 default: currentOptions.accessToken
             }
         ]);
@@ -232,7 +232,7 @@ module.exports.getSetup = ({ chalk, currentOptions, inquirer, ora }) => {
                         type: 'list',
                         name: 'spaceId',
                         message: 'Which Contentful space do you want to use?',
-                        choices: spaces.map(space => ({
+                        choices: spaces.map((space) => ({
                             name: space.name,
                             value: space.sys.id
                         }))
@@ -263,7 +263,7 @@ module.exports.getSetup = ({ chalk, currentOptions, inquirer, ora }) => {
                     type: 'list',
                     name: 'environment',
                     message: 'What environment do you want to use?',
-                    choices: environments.map(environment => ({
+                    choices: environments.map((environment) => ({
                         name: environment.name,
                         value: environment.sys.id
                     })),
