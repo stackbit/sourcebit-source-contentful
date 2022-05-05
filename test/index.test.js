@@ -132,7 +132,7 @@ const MOCK_ENTRIES = [
                 'en-US': 'Doe'
             }
         }
-    },
+    }
 ];
 
 const MOCK_ASSETS = [
@@ -140,29 +140,29 @@ const MOCK_ASSETS = [
         sys: {
             space: {
                 sys: {
-                    type: "Link",
-                    linkType: "Space",
-                    id: "123456789"
+                    type: 'Link',
+                    linkType: 'Space',
+                    id: '123456789'
                 }
             },
-            id: "7orLdboQQowIUs22KAW4U",
-            type: "Asset",
-            createdAt: "2022-04-30T14:30:48.053Z",
-            updatedAt: "2022-04-30T14:32:40.219Z",
+            id: '7orLdboQQowIUs22KAW4U',
+            type: 'Asset',
+            createdAt: '2022-04-30T14:30:48.053Z',
+            updatedAt: '2022-04-30T14:32:40.219Z',
             environment: {
                 sys: {
-                    id: "master",
-                    type: "Link",
-                    linkType: "Environment"
+                    id: 'master',
+                    type: 'Link',
+                    linkType: 'Environment'
                 }
             },
-            revision: 2,
+            revision: 2
         },
         fields: {
-            title: "Sparkler",
-            description: "John with Sparkler",
+            title: 'Sparkler',
+            description: 'John with Sparkler',
             file: {
-                url: "//images.ctfassets.net/spaceId/7orLdboQQowIUs22KAW4U/e237faf0c6a0c89f8dce3e35e552176e/matt-palmer-254999.jpg",
+                url: '//images.ctfassets.net/spaceId/7orLdboQQowIUs22KAW4U/e237faf0c6a0c89f8dce3e35e552176e/matt-palmer-254999.jpg',
                 details: {
                     size: 2293094,
                     image: {
@@ -170,12 +170,12 @@ const MOCK_ASSETS = [
                         height: 2000
                     }
                 },
-                fileName: "matt-palmer-254999.jpg",
-                contentType: "image/jpeg"
+                fileName: 'matt-palmer-254999.jpg',
+                contentType: 'image/jpeg'
             }
         }
     }
-]
+];
 
 describe('`transform()`', () => {
     test('resolves links and normalizes entries', () => {
