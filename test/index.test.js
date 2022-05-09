@@ -215,9 +215,11 @@ describe('`transform()`', () => {
         expect(objects[2].lastName).toBe(MOCK_ENTRIES[2].fields.lastName['en-US']);
 
         expect(objects[3].url).toContain(MOCK_ASSETS[0].fields.file.url);
-        expect(objects[3].fileName).toContain(MOCK_ASSETS[0].fields.file.fileName);
-        expect(objects[3].contentType).toContain(MOCK_ASSETS[0].fields.file.contentType);
-        expect(objects[3].details).toBeDefined();
-        expect(objects[3].details.size).toEqual(MOCK_ASSETS[0].fields.file.details.size);
+        expect(objects[3].fileName).toBe(MOCK_ASSETS[0].fields.file.fileName);
+        expect(objects[3].contentType).toBe(MOCK_ASSETS[0].fields.file.contentType);
+        expect(objects[3].size).toBe(MOCK_ASSETS[0].fields.file.details.size);
+        expect(objects[3].dimensions).toBeDefined();
+        expect(objects[3].dimensions.width).toBe(MOCK_ASSETS[0].fields.file.details.image.width);
+        expect(objects[3].dimensions.height).toBe(MOCK_ASSETS[0].fields.file.details.image.height);
     });
 });
