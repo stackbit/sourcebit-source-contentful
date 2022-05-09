@@ -159,19 +159,25 @@ const MOCK_ASSETS = [
             revision: 2
         },
         fields: {
-            title: 'Sparkler',
-            description: 'John with Sparkler',
+            title: {
+                'en-US': 'Sparkler'
+            },
+            description: {
+                'en-US': 'John with Sparkler'
+            },
             file: {
-                url: '//images.ctfassets.net/spaceId/7orLdboQQowIUs22KAW4U/e237faf0c6a0c89f8dce3e35e552176e/matt-palmer-254999.jpg',
-                details: {
-                    size: 2293094,
-                    image: {
-                        width: 3000,
-                        height: 2000
-                    }
-                },
-                fileName: 'matt-palmer-254999.jpg',
-                contentType: 'image/jpeg'
+                'en-US': {
+                    url: '//images.ctfassets.net/spaceId/7orLdboQQowIUs22KAW4U/e237faf0c6a0c89f8dce3e35e552176e/matt-palmer-254999.jpg',
+                    details: {
+                        size: 2293094,
+                        image: {
+                            width: 3000,
+                            height: 2000
+                        }
+                    },
+                    fileName: 'matt-palmer-254999.jpg',
+                    contentType: 'image/jpeg'
+                }
             }
         }
     }
@@ -214,12 +220,12 @@ describe('`transform()`', () => {
         expect(objects[2].firstName).toBe(MOCK_ENTRIES[2].fields.firstName['en-US']);
         expect(objects[2].lastName).toBe(MOCK_ENTRIES[2].fields.lastName['en-US']);
 
-        expect(objects[3].url).toContain(MOCK_ASSETS[0].fields.file.url);
-        expect(objects[3].fileName).toBe(MOCK_ASSETS[0].fields.file.fileName);
-        expect(objects[3].contentType).toBe(MOCK_ASSETS[0].fields.file.contentType);
-        expect(objects[3].size).toBe(MOCK_ASSETS[0].fields.file.details.size);
+        expect(objects[3].url).toContain(MOCK_ASSETS[0].fields.file['en-US'].url);
+        expect(objects[3].fileName).toBe(MOCK_ASSETS[0].fields.file['en-US'].fileName);
+        expect(objects[3].contentType).toBe(MOCK_ASSETS[0].fields.file['en-US'].contentType);
+        expect(objects[3].size).toBe(MOCK_ASSETS[0].fields.file['en-US'].details.size);
         expect(objects[3].dimensions).toBeDefined();
-        expect(objects[3].dimensions.width).toBe(MOCK_ASSETS[0].fields.file.details.image.width);
-        expect(objects[3].dimensions.height).toBe(MOCK_ASSETS[0].fields.file.details.image.height);
+        expect(objects[3].dimensions.width).toBe(MOCK_ASSETS[0].fields.file['en-US'].details.image.width);
+        expect(objects[3].dimensions.height).toBe(MOCK_ASSETS[0].fields.file['en-US'].details.image.height);
     });
 });
