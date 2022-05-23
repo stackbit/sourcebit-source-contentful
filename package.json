@@ -1,6 +1,6 @@
 {
     "name": "sourcebit-source-contentful",
-    "version": "0.6.7",
+    "version": "0.6.8",
     "description": "A Contentful plugin for Sourcebit",
     "main": "index.js",
     "scripts": {
