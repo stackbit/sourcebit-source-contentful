@@ -123,10 +123,12 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
             response.assets.forEach((asset) => {
                 const index = assets.findIndex(({ sys }) => sys.id === asset.sys.id);
 
-                if (index === -1) {
+                if (index === -1 && assets.fields.file) {
                     assets.push(asset);
-                } else {
+                } else if(assets.fields.file) {
                     assets[index] = asset;
+                } else {
+                    assets[index] = null;
                 }
             });
 
