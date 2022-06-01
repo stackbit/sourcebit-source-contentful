@@ -127,7 +127,7 @@ module.exports.bootstrap = async ({ getPluginContext, options, refresh, setPlugi
                     assets.push(asset);
                 } else if(asset.fields.file) {
                     assets[index] = asset;
-                } else {
+                } else if(index !== -1) {
                     assets[index] = null;
                 }
             });
